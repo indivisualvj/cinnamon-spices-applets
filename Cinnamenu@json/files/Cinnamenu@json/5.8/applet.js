@@ -1375,7 +1375,10 @@ class CinnamenuApplet extends TextIconApplet {
             const MAX_FOLDERS_TODO = 200;
             const results = [];
             const foldersToDo = [];
-            foldersToDo.push(this.settings.searchStartFolder);//start search in (default value) home directory
+            const includedFolders = ['Documents', 'Downloads'];
+            for (const includedFolder in includedFolders) {
+                foldersToDo.push(this.settings.searchStartFolder + '/' + includedFolder);
+            }
             let currentFolderIndex = 0;
             let lastUpdateTime = Date.now();
 
