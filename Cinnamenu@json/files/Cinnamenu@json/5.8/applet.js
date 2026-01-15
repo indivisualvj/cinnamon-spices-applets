@@ -1375,9 +1375,14 @@ class CinnamenuApplet extends TextIconApplet {
             const MAX_FOLDERS_TODO = 200;
             const results = [];
             const foldersToDo = [];
-            const includedFolders = ['Documents', 'Downloads'];
-            for (const includedFolder in includedFolders) {
-                foldersToDo.push(this.settings.searchStartFolder + '/' + includedFolder);
+            const customFolders = [
+                'Downloads',
+                'blutze.hbox/Dokumente',
+                'blutze.dbox',
+            ];
+
+            for (const customFolder in customFolders) {
+                foldersToDo.push(this.settings.searchStartFolder + '/' + customFolder);
             }
             let currentFolderIndex = 0;
             let lastUpdateTime = Date.now();
