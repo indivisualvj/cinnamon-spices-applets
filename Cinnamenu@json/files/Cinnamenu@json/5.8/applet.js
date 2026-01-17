@@ -1377,7 +1377,8 @@ class CinnamenuApplet extends TextIconApplet {
             const foldersToDo = [];
             const customFolders = [
                 'Downloads',
-                'blutze.hbox/Dokumente',
+                'Dokumente',
+                'Documents',
                 'blutze.dbox',
             ];
 
