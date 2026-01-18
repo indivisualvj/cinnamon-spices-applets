@@ -218,6 +218,7 @@ class CinnamenuApplet extends TextIconApplet {
         { key: 'web-search-custom-url',     value: 'webSearchCustomURL',    cb: null },
         { key: 'web-suggestions',           value: 'webSuggestionsOption',  cb: null },
         { key: 'enable-home-folder-search', value: 'searchHomeFolder',      cb: null },
+        { key: 'included-home-folder-directories', value: 'includedHomeFolderDirectories',      cb: null },
         { key: 'enable-web-history-search', value: 'enableWebHistorySearch', cb: null },
         { key: 'enable-web-bookmarks-search', value: 'enableWebBookmarksSearch', cb: null },
         { key: 'enable-wikipedia-search',   value: 'enableWikipediaSearch', cb: null },
@@ -1375,15 +1376,15 @@ class CinnamenuApplet extends TextIconApplet {
             const MAX_FOLDERS_TODO = 200;
             const results = [];
             const foldersToDo = [];
-            const customFolders = [
-                'Downloads',
-                'Dokumente',
-                'Documents',
-                'blutze.dbox',
-            ];
 
-            for (const customFolder in customFolders) {
-                foldersToDo.push(this.settings.searchStartFolder + '/' + customFolder);
+            if (this.settings.includedHomeFolderDirectories.length > 0) {
+                const customFolders = this.settings.includedHomeFolderDirectories.split(',');
+
+                for (const customFolderKey in customFolders) {
+                    foldersToDo.push(this.settings.searchStartFolder + '/' + customFolders[customFolderKey]);
+                }
+            } else {
+                foldersToDo.push(this.settings.searchStartFolder);
             }
             let currentFolderIndex = 0;
             let lastUpdateTime = Date.now();

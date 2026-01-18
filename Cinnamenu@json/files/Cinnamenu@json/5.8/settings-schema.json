@@ -99,6 +99,7 @@
                 "web-search-custom-url",
                 "web-suggestions",
                 "enable-home-folder-search",
+                "included-home-folder-directories",
                 "enable-web-history-search",
                 "enable-web-bookmarks-search",
                 "enable-wikipedia-search",
@@ -380,6 +381,13 @@
         "default":true,
         "description":"Search home folder",
         "tooltip":"When searching, also search my home folder for files"
+    },
+    "included-home-folder-directories":{
+        "type":"entry",
+        "default":"",
+        "description":"Search home folder included (comma separated)",
+        "tooltip":"When searching, only search in these folders for files. Empty means all",
+        "dependency": "enable-home-folder-search"
     },
     "enable-web-history-search":{
         "type":"checkbox",
