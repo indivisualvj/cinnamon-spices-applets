@@ -229,6 +229,7 @@ class Display {
                                 toPercent(menuWidth + overhead.width, workArea.width);
                 this.appThis.settings.menuHeightPercent =
                                 toPercent(newHeight + overhead.height, workArea.height);
+                this.appThis._updateMenuStyleClass();
             } else {
                 this.appThis.settings.customMenuHeight = newHeight / global.ui_scale;
                 this.appThis.settings.customMenuWidth = menuWidth / global.ui_scale;

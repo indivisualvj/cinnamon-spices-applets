@@ -119,6 +119,11 @@ margin to override*/
 /*---whole menu-----------------------------
 .cinnamenu (and .menu-background)
 (.menu)*/
+/* Set when the menu is sized to 100% of the screen: blurring the theme's box-shadow of such a
+   large menu is slow and makes the menu open with a noticeable delay. */
+.menu.cinnamenu-no-shadow {
+    box-shadow: none;
+}
 
 /*
 Note: You can make a style to apply to Cinnamenu applet but not other menu applets by

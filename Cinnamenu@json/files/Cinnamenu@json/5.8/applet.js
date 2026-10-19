@@ -185,9 +185,9 @@ class CinnamenuApplet extends TextIconApplet {
         { key: 'categories',                value: 'categories',            cb: null },
         { key: 'custom-menu-height',        value: 'customMenuHeight',      cb: null },
         { key: 'custom-menu-width',         value: 'customMenuWidth',       cb: null },
-        { key: 'menu-size-relative',        value: 'menuSizeRelative',      cb: null },
-        { key: 'menu-width-percent',        value: 'menuWidthPercent',      cb: null },
-        { key: 'menu-height-percent',       value: 'menuHeightPercent',     cb: null },
+        { key: 'menu-size-relative',        value: 'menuSizeRelative',      cb: () => this._updateMenuStyleClass() },
+        { key: 'menu-width-percent',        value: 'menuWidthPercent',      cb: () => this._updateMenuStyleClass() },
+        { key: 'menu-height-percent',       value: 'menuHeightPercent',     cb: () => this._updateMenuStyleClass() },
         { key: 'recent-apps',               value: 'recentApps',            cb: null },
         { key: 'search-start-folder',       value: 'searchStartFolder',     cb: null },
         { key: 'all-apps-old-style',        value: 'allAppsOldStyle',       cb: null },
@@ -252,9 +252,19 @@ class CinnamenuApplet extends TextIconApplet {
         this._onEnableRecentsChange();
         updateActivateOnHover();
         updateKeybinding();
+        this._updateMenuStyleClass();
         this.display = new Display(this);
         this.initialised = true;
         this._updateIconAndLabel();
+    }
+
+    _updateMenuStyleClass() {
+        //No box-shadow when the menu fills the whole screen: it isn't visible anyway and blurring
+        //the shadow of such a large menu is slow.
+        const fullScreen = this.settings.menuSizeRelative && this.settings.menuWidthPercent === 100
+                                                        && this.settings.menuHeightPercent === 100;
+        this.menu.setCustomStyleClass('menu-background cinnamenu' +
+                                                        (fullScreen ? ' cinnamenu-no-shadow' : ''));
     }
 //----------------TextIconApplet callbacks----------------
     on_orientation_changed(orientation) {
