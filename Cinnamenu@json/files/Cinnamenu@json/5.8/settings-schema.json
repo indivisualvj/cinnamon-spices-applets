@@ -54,7 +54,10 @@
                 "show-sidebar",
                 "sidebar-placement",
                 "sidebar-favorites",
-                "description-placement"
+                "description-placement",
+                "menu-size-relative",
+                "menu-width-percent",
+                "menu-height-percent"
             ]
         },
         "menu-content":{
@@ -153,6 +156,32 @@
     "custom-menu-height":{
         "type":"generic",
         "default":530
+    },
+    "menu-size-relative":{
+        "type":"switch",
+        "default":false,
+        "description":"Size menu relative to screen",
+        "tooltip":"Set the menu width and height as a percentage of the screen's work area instead of resizing it by dragging its edge"
+    },
+    "menu-width-percent":{
+        "dependency":"menu-size-relative",
+        "type":"spinbutton",
+        "default":50,
+        "min":10,
+        "max":100,
+        "step":5,
+        "units":"%",
+        "description":"Menu width"
+    },
+    "menu-height-percent":{
+        "dependency":"menu-size-relative",
+        "type":"spinbutton",
+        "default":60,
+        "min":10,
+        "max":100,
+        "step":5,
+        "units":"%",
+        "description":"Menu height"
     },
     "recent-apps":{
         "type":"generic",

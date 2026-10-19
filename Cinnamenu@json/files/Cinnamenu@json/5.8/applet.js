@@ -80,8 +80,8 @@ class CinnamenuApplet extends TextIconApplet {
         this.resizer = new PopupResizeHandler(this.menu.actor,
                                               () => this.orientation,
                                               (w,h) => this.display.onMenuResized(w,h),
-                                              () => this.settings.customMenuWidth * global.ui_scale,
-                                              () => this.settings.customMenuHeight * global.ui_scale);
+                                              () => this.display.getConfiguredMenuSize().width,
+                                              () => this.display.getConfiguredMenuSize().height);
         this.signals.connect(this.privacy_settings, 'changed::' + REMEMBER_RECENT_KEY,
                                                         () => this._onEnableRecentsChange());
 
@@ -185,6 +185,9 @@ class CinnamenuApplet extends TextIconApplet {
         { key: 'categories',                value: 'categories',            cb: null },
         { key: 'custom-menu-height',        value: 'customMenuHeight',      cb: null },
         { key: 'custom-menu-width',         value: 'customMenuWidth',       cb: null },
+        { key: 'menu-size-relative',        value: 'menuSizeRelative',      cb: null },
+        { key: 'menu-width-percent',        value: 'menuWidthPercent',      cb: null },
+        { key: 'menu-height-percent',       value: 'menuHeightPercent',     cb: null },
         { key: 'recent-apps',               value: 'recentApps',            cb: null },
         { key: 'search-start-folder',       value: 'searchStartFolder',     cb: null },
         { key: 'all-apps-old-style',        value: 'allAppsOldStyle',       cb: null },

@@ -152,8 +152,7 @@ class Display {
     updateMenuSize(newWidth, newHeight) {
         //if newWidth & newHeight are not supplied, use current settings values.
         if (!newWidth) {
-            newWidth = this.appThis.settings.customMenuWidth * global.ui_scale,
-            newHeight= this.appThis.settings.customMenuHeight * global.ui_scale
+            ({width: newWidth, height: newHeight} = this.getConfiguredMenuSize());
         }
 
         //----------height--------
@@ -215,11 +214,58 @@ class Display {
         this.appsView.currentGridBoxWidth = appsBoxWidth; //because reading
                                                         //applicationsGridBox.width seems unreliable.
 
+        this.lastMenuWidth = menuWidth;
+        this.lastMenuHeight = newHeight;
+
         //Don't change settings while resizing to avoid excessive disk writes.
         if (!this.appThis.resizer.resizingInProgress) {
-            this.appThis.settings.customMenuHeight = newHeight / global.ui_scale;
-            this.appThis.settings.customMenuWidth = menuWidth / global.ui_scale;
+            if (this.appThis.settings.menuSizeRelative) {
+                //store a resize by dragging as percentage of the work area
+                const workArea = this._getWorkArea();
+                const overhead = this._getMenuOverhead();
+                const toPercent = (size, total) =>
+                                Math.min(100, Math.max(10, Math.round(size / total * 100)));
+                this.appThis.settings.menuWidthPercent =
+                                toPercent(menuWidth + overhead.width, workArea.width);
+                this.appThis.settings.menuHeightPercent =
+                                toPercent(newHeight + overhead.height, workArea.height);
+            } else {
+                this.appThis.settings.customMenuHeight = newHeight / global.ui_scale;
+                this.appThis.settings.customMenuWidth = menuWidth / global.ui_scale;
+            }
         }
+    }
+
+    //Returns the menu size (px) to use: either the stored custom size or, if "menu-size-relative"
+    //is enabled, a percentage of the work area of the panel's monitor. Like the stored custom
+    //size, the returned values exclude the menu's outer padding etc.
+    getConfiguredMenuSize() {
+        const settings = this.appThis.settings;
+        if (!settings.menuSizeRelative) {
+            return {width: settings.customMenuWidth * global.ui_scale,
+                    height: settings.customMenuHeight * global.ui_scale};
+        }
+
+        const workArea = this._getWorkArea();
+        const overhead = this._getMenuOverhead();
+        return {width: Math.floor(workArea.width * settings.menuWidthPercent / 100 - overhead.width),
+                height: Math.floor(workArea.height * settings.menuHeightPercent / 100 - overhead.height)};
+    }
+
+    _getWorkArea() {
+        return global.workspace_manager.get_active_workspace()
+                                .get_work_area_for_monitor(this.appThis.panel.monitorIndex);
+    }
+
+    //Difference between the menu's actual size and the size last applied in updateMenuSize()
+    //(outer padding, borders, search entry etc.). Zero until the menu has been allocated once.
+    _getMenuOverhead() {
+        const menuActor = this.appThis.menu.actor;
+        if (!this.lastMenuWidth || !menuActor.width || !menuActor.height) {
+            return {width: 0, height: 0};
+        }
+        return {width: Math.max(0, menuActor.width - this.lastMenuWidth),
+                height: Math.max(0, menuActor.height - this.lastMenuHeight)};
     }
 
     destroy() {
